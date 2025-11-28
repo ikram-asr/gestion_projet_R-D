@@ -1,0 +1,59 @@
+spring:
+  application:
+    name: validation-service
+  
+  datasource:
+    # Option 1: Schéma public (recommandé si vous utilisez create-schemas-simple.sql)
+    url: ${VALIDATION_DB_URL:jdbc:postgresql://db.xxxxx.supabase.co:5432/postgres?sslmode=require}
+    # Option 2: Schéma validation (si vous utilisez create-schemas-with-permissions.sql)
+    # url: ${VALIDATION_DB_URL:jdbc:postgresql://db.xxxxx.supabase.co:5432/postgres?currentSchema=validation&sslmode=require}
+    username: ${VALIDATION_DB_USERNAME:postgres}
+    password: ${VALIDATION_DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      data-source-properties:
+        ssl: true
+        sslmode: require
+  
+  jpa:
+    hibernate:
+      ddl-auto: validate
+      # Utilisez 'update' en développement, 'validate' en production
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        default_schema: validation
+  
+  rabbitmq:
+    host: ${SPRING_RABBITMQ_HOST:localhost}
+    port: ${SPRING_RABBITMQ_PORT:5672}
+    username: ${SPRING_RABBITMQ_USERNAME:admin}
+    password: ${SPRING_RABBITMQ_PASSWORD:admin}
+    listener:
+      simple:
+        retry:
+          enabled: true
+          initial-interval: 1000
+          max-attempts: 3
+
+auth:
+  service:
+    url: ${AUTH_SERVICE_URL:http://localhost:8081}
+
+server:
+  port: ${SERVER_PORT:8082}
+
+logging:
+  level:
+    com.rnd.validation: DEBUG
+    org.hibernate.SQL: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+

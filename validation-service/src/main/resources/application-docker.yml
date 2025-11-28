@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+  
+  rabbitmq:
+    host: ${SPRING_RABBITMQ_HOST}
+    port: ${SPRING_RABBITMQ_PORT}
+    username: ${SPRING_RABBITMQ_USERNAME}
+    password: ${SPRING_RABBITMQ_PASSWORD}
+
+auth:
+  service:
+    url: ${AUTH_SERVICE_URL}
+
+server:
+  port: ${SERVER_PORT:8082}
+
+
+
